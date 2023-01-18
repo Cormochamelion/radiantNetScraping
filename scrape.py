@@ -37,6 +37,7 @@ callback_url = ulparse.parse_qs(
 login_soup = bs(login_form_resp.content, "lxml")
 
 login_params = {
+        "code": None,
         "id_token": None,
         "state": None,
         "AuthenticatedIdPs": None,
