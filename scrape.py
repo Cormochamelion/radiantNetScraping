@@ -1,5 +1,7 @@
 import os
 import re
+import json
+import datetime as dt
 from bs4 import BeautifulSoup as bs
 import urllib.parse as ulparse
 import requests as rq
@@ -10,6 +12,7 @@ load_dotenv()
 session = rq.Session()
 
 # Just to get the __RequestVerificationToken
+# TODO Add handling of case that solarweb is not reachable.
 _ = session.get(url = "https://www.solarweb.com/")
 
 login_page_resp = session.get(
@@ -24,6 +27,7 @@ for line in login_page_resp.iter_lines():
         if match:
                 session_key = match.group()
 
+# TODO Add handling of login errors.
 login_form_resp = session.post(
         url = os.getenv("login-form-target-url"),
         data = {
@@ -47,27 +51,33 @@ for key in login_params.keys():
         login_params[key] = login_soup.find(
                 "input", {"name": key}).get("value")
 
-session.cookies.set_cookie(
-        cookie = rq.cookies.create_cookie(
-                name = "CookieConsent",
-                value = "{stamp:%27gRVY3rqRIx2YJ2RHmObsmUmG28xBYPMuFZWa8FCMSmDuKBJHF0QtZw==%27%2Cnecessary:true%2Cpreferences:false%2Cstatistics:false%2Cmarketing:false%2Cmethod:%27explicit%27%2Cver:1%2Cutc:1673814469854%2Cregion:%27de%27}"))
-
-
 callback_resp = session.post(
         url = callback_url,
         data = login_params)
 
-print("Done")
 
-# chart_resp = session.get(url = "https://www.solarweb.com/Chart/GetChartNew", data = {"pvSystemId": os.getenv("fronius-id"), "year": 2023, "month": 1, "day": 14, "interval": "day", "view": "production"}, cookies = session.cookies)
+def chart_data(id, date):
+       return {
+        "pvSystemId": id,
+        "year": date.year,
+        "month": date.month,
+        "day": date.day,
+        "interval": "day",
+        "view": "production"}
 
-def chart_url(id, year, month, day):
-        host = "https://www.solarweb.com/"
-        file = "Chart/GetChartNew"
-        params = {
-                "id": id,
-                "year": year,
-                "month": month,
-                "day": day}
+yesterday = dt.date.today() - dt.timedelta(days = 1)
 
-        chart_url = f"{host}{file}&interval=day&view=production"
+chart_resp = session.get(
+        url = "https://www.solarweb.com/Chart/GetChartNew",
+        data = chart_data(
+                id = os.getenv("fronius-id"),
+                date = yesterday))
+
+# TODO Add handling of case that chart_resp doesn't contain json.
+json_out = json.dumps(chart_resp.json())
+
+output_dir = "./"
+output_file = output_dir + yesterday.strftime("%Y%m%d.json")
+
+with open(output_file, "w") as outfile:
+        outfile.write(json_out)
