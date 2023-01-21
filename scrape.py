@@ -16,6 +16,7 @@ session = rq.Session()
 _ = session.get(url = "https://www.solarweb.com/")
 
 login_url = "https://www.solarweb.com/Account/ExternalLogin"
+login_form_post_url = "https://login.fronius.com/commonauth"
 
 login_page_resp = session.get(
         login_url,
@@ -31,7 +32,7 @@ for line in login_page_resp.iter_lines():
 
 # TODO Add handling of login errors.
 login_form_resp = session.post(
-        url = os.getenv("login-form-target-url"),
+        url = login_form_post_url,
         data = {
                 "username": os.getenv("username"),
                 "password": os.getenv("password"),
