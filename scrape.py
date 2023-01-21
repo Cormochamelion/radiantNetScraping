@@ -15,8 +15,10 @@ session = rq.Session()
 # TODO Add handling of case that solarweb is not reachable.
 _ = session.get(url = "https://www.solarweb.com/")
 
+login_url = "https://www.solarweb.com/Account/ExternalLogin"
+
 login_page_resp = session.get(
-        os.getenv("login-url"),
+        login_url,
         allow_redirects = True)
 
 key_pattern = re.compile("(?<=&sessionDataKey=)[a-z0-9\-]*")
