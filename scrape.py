@@ -9,10 +9,24 @@ from fronius_scraper.fronius_session import FroniusSession
 
 load_dotenv()
 
+secrets = {
+        "username": os.getenv("username"),
+        "password": os.getenv("password"),
+        "fronius-id": os.getenv("fronius-id")
+}
+
+if None in secrets.values():
+        none_secrets = ", ".join(
+                [x[0] for x in secrets.items() if x[1] is None])
+
+        raise Exception(
+                f"Fields {none_secrets} where not filled. Check your .env " \
+                f"file.")
+
 fsession = FroniusSession(
-        user = os.getenv("username"),
-        password = os.getenv("password"),
-        id = os.getenv("fronius-id")
+        user = secrets["username"],
+        password = secrets["password"],
+        id = secrets["fronius-id"]
 )
 
 yesterday = dt.date.today() - dt.timedelta(days = 1)
