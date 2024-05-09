@@ -8,6 +8,8 @@
   (list "python-beautifulsoup4"
         "python-dotenv"
         "python-hatch"
+        "python-numpy"
+        "python-pandas"
         "python-pip"
         "python-requests"
         "python"))
