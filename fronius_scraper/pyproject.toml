@@ -19,6 +19,7 @@ development = ["black==22.12.*"]
 
 [project.scripts]
 fronius-scraper = "fronius_scraper.scripts:scrape"
+fronius-data-parser = "fronius_scraper.scripts:parse_json_files"
 
 [build-system]
 requires = ["setuptools"]
