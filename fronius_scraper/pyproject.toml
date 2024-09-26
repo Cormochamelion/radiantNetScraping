@@ -15,7 +15,7 @@ description = "Scraping & saving usage data from Fronius Solarweb."
 authors = [{ name = "Cormochamelion", email = "cormocodran1.5@gmail.com" }]
 
 [project.optional-dependencies]
-development = ["black==22.12.*"]
+development = ["black==22.12.*", "pytest-cases<=3.8.5", "pytest<=8.3"]
 
 [project.scripts]
 fronius-scraper = "fronius_scraper.scripts:scrape"
