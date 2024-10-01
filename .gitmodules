@@ -1,0 +1,3 @@
+[submodule "radiantNetScraper"]
+	path = radiantNetScraper
+	url = https://github.com/Cormochamelion/radiantNetScraper
