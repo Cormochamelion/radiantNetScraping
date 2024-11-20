@@ -1,0 +1,23 @@
+services:
+  scraper:
+    build: radiantNetScraper
+    volumes:
+      - type: volume
+        source: app_data
+        target: /root/.local/share/radiant-net-scraper/
+    env_file: ./.env
+
+  dashboard:
+    build: radiantNetDashboard
+    network_mode: "host"
+    environment:
+      - R_CONFIG_ACTIVE=docker-compose
+    volumes:
+      - type: volume
+        source: app_data
+        target: /root/.local/share/radiant-net-scraper/
+
+volumes:
+  app_data:
+    labels:
+      de.radiantNetScraping.description: "Data volume"
