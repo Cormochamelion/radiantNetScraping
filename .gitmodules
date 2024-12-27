@@ -1,6 +1,8 @@
 [submodule "radiantNetScraper"]
 	path = radiantNetScraper
 	url = https://github.com/Cormochamelion/radiantNetScraper
+	branch = main
 [submodule "radiantNetDashboard"]
 	path = radiantNetDashboard
 	url = https://github.com/Cormochamelion/radiantNetDashboard.git
+	branch = main
